@@ -1,0 +1,7 @@
+{
+  "name": "SmartCabinet",
+  "displayName": "SmartCabinet",
+  "plugins": [
+    "expo-sharing"
+  ]
+}
