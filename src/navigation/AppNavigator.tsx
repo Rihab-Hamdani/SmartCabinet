@@ -1,46 +1,38 @@
 import React from 'react';
-import {View, ActivityIndicator, Text, StyleSheet} from 'react-native';
-import {NavigationContainer} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import { View, ActivityIndicator, Text, StyleSheet } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
-// --- AUTH SCREENS ---
 import WelcomeScreen from '../screens/auth/WelcomeScreen';
 import CreerCompteScreen from '../screens/auth/CreerCompteScreen';
 import LoginScreen from '../screens/auth/LoginScreen';
 import VerifierEmailScreen from '../screens/auth/VerifierEmailScreen';
 import MotDePasseOublieScreen from '../screens/auth/MotDePasseOublieScreen';
-
-// --- DASHBOARDS ---
 import DashboardMedecin from '../screens/medecin/DashboardMedecin';
 import DashboardSecretaire from '../screens/secretaire/DashboardSecretaire';
-
-// --- STOCK ---
 import StockList from '../screens/shared/StockList';
 import StockForm from '../screens/shared/StockForm';
 import StockDetail from '../screens/shared/StockDetail';
 import StockRetirer from '../screens/shared/StockRetirer';
 import StockArrivage from '../screens/shared/StockArrivage';
-
-// --- PATIENTS & RDV ---
 import PatientsScreen from '../screens/shared/PatientsScreen';
 import AjouterPatientScreen from '../screens/shared/AjouterPatientScreen';
 import CalendrierScreen from '../screens/shared/CalendrierScreen';
 import AjouterRDVScreen from '../screens/shared/AjouterRDVScreen';
 import DetailPatientScreen from '../screens/shared/DetailPatientScreen';
-
-// --- CONSULTATIONS ---
 import AjouterConsultationScreen from '../screens/medecin/AjouterConsultationScreen';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
-// --- SOUS-STACKS ISOLÉS (Pour éviter les conflits de Hooks) ---
-
 const StockStackSecretaire = () => (
-  <Stack.Navigator screenOptions={{headerShown: false}}>
-    <Stack.Screen name="StockList" component={StockList} initialParams={{role: 'secretaire'}} />
+  <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <Stack.Screen
+      name="StockList"
+      component={StockList}
+      initialParams={{ role: 'secretaire' }}
+    />
     <Stack.Screen name="StockForm" component={StockForm} />
     <Stack.Screen name="StockDetail" component={StockDetail} />
     <Stack.Screen name="StockArrivage" component={StockArrivage} />
@@ -49,8 +41,12 @@ const StockStackSecretaire = () => (
 );
 
 const StockStackMedecin = () => (
-  <Stack.Navigator screenOptions={{headerShown: false}}>
-    <Stack.Screen name="StockList" component={StockList} initialParams={{role: 'medecin'}} />
+  <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <Stack.Screen
+      name="StockList"
+      component={StockList}
+      initialParams={{ role: 'medecin' }}
+    />
     <Stack.Screen name="StockDetail" component={StockDetail} />
     <Stack.Screen name="StockRetirer" component={StockRetirer} />
   </Stack.Navigator>
@@ -58,7 +54,11 @@ const StockStackMedecin = () => (
 
 const PatientsStackSecretaire = () => (
   <Stack.Navigator screenOptions={{ headerShown: false }}>
-    <Stack.Screen name="PatientsList" component={PatientsScreen} initialParams={{ role: 'secretaire' }} />
+    <Stack.Screen
+      name="PatientsList"
+      component={PatientsScreen}
+      initialParams={{ role: 'secretaire' }}
+    />
     <Stack.Screen name="AjouterPatient" component={AjouterPatientScreen} />
     <Stack.Screen name="AjouterRDV" component={AjouterRDVScreen} />
     <Stack.Screen name="DetailPatient" component={DetailPatientScreen} />
@@ -121,11 +121,11 @@ const MedecinTabs = ({route}: any) => {
   );
 };
 
-const SecretaireTabs = ({route}: any) => {
+const SecretaireTabs = ({ route }: any) => {
   const { onLogout } = route.params;
   return (
     <Tab.Navigator
-      screenOptions={({route}) => ({
+      screenOptions={({ route }) => ({
         headerShown: false,
         tabBarStyle: {
           backgroundColor: '#161B22',
@@ -148,8 +148,6 @@ const SecretaireTabs = ({route}: any) => {
     </Tab.Navigator>
   );
 };
-
-// --- MAIN NAVIGATOR ---
 
 export default function AppNavigator() {
   const [user, setUser] = React.useState<any>(null);

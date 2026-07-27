@@ -47,12 +47,10 @@ export default function DashboardSecretaire({navigation, onLogout}: any) {
   const couleurStatut = (s: string) =>
     s === 'confirmé' ? '#00BFA5' : s === 'annulé' ? '#FF4757' : '#FFA502';
 
-  // Civilité et emoji selon sexe
   const estFemme = user?.sexe === 'F';
   const civilite = estFemme ? 'Mme' : 'M.';
   const emoji    = estFemme ? '👩‍💼' : '👨‍💼';
 
-  // Date du jour
   const dateAujourdhui = new Date().toLocaleDateString('fr-FR', {
     weekday: 'long', day: 'numeric', month: 'long',
   });
@@ -160,7 +158,6 @@ export default function DashboardSecretaire({navigation, onLogout}: any) {
           ))
         )}
       </View>
-
     </ScrollView>
   );
 }

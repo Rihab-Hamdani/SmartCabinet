@@ -149,7 +149,6 @@ export default function LoginScreen({ navigation, onLogin }: any) {
             {erreurEmail !== '' && <Text style={styles.erreurTxt}>{erreurEmail}</Text>}
           </View>
 
-          {/* Champ Mot de Passe */}
           <View style={styles.fieldWrap}>
             <Text style={styles.fieldLabel}>Mot de passe</Text>
             <View style={styles.inputRow}>
