@@ -61,8 +61,14 @@ const creerTables = (): Promise<void> => {
         // 2. Table PATIENTS
         tx.executeSql(`CREATE TABLE IF NOT EXISTS patients (
           id INTEGER PRIMARY KEY AUTOINCREMENT,
-          nom TEXT NOT NULL, prenom TEXT NOT NULL,
-          cin TEXT, telephone TEXT, email TEXT,
+          nom TEXT NOT NULL, 
+          prenom TEXT NOT NULL,
+          cin TEXT UNIQUE, 
+          date_naissance DATE,
+          telephone TEXT, 
+          email TEXT,
+          sexe TEXT,
+          antecedents TEXT,
           created_at TEXT DEFAULT (datetime('now'))
         );`);
 
@@ -102,7 +108,7 @@ tx.executeSql(`CREATE TABLE IF NOT EXISTS consultations (
           updated_at TEXT DEFAULT (datetime('now'))
         );`);
 
-        // 6. 🟢 TABLE HISTORIQUE STOCK (Appelée dans stockservices.ts)
+        // 6.  TABLE HISTORIQUE STOCK (Appelée dans stockservices.ts)
         tx.executeSql(`CREATE TABLE IF NOT EXISTS historique_stock (
           id INTEGER PRIMARY KEY AUTOINCREMENT,
           produit_id INTEGER NOT NULL,

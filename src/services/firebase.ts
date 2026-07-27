@@ -1,22 +1,13 @@
-import auth, { 
-  signInWithEmailAndPassword, 
-  createUserWithEmailAndPassword, 
-  sendEmailVerification,
-  sendPasswordResetEmail,
-  signOut,
-  reload
-} from '@react-native-firebase/auth';
-
-// Initialisation unique
-const authInstance = auth();
+import auth from '@react-native-firebase/auth';
 
 export const firebaseCreerCompte = async (email: string, password: string) => {
-  // Utilisation de authInstance
-  const userCredential = await createUserWithEmailAndPassword(authInstance, email.trim().toLowerCase(), password);
+  const userCredential = await auth().createUserWithEmailAndPassword(
+    email.trim().toLowerCase(), 
+    password
+  );
   
   try {
-    // Nouvelle syntaxe : on passe le user à la fonction
-    await sendEmailVerification(userCredential.user);
+    await userCredential.user.sendEmailVerification();
   } catch (e) {
     console.warn('Email de vérification non envoyé:', e);
   }
@@ -28,8 +19,11 @@ export const firebaseCreerCompte = async (email: string, password: string) => {
 };
 
 export const firebaseConnexion = async (email: string, password: string) => {
-  const userCredential = await signInWithEmailAndPassword(authInstance, email.trim().toLowerCase(), password);
-  await reload(userCredential.user);
+  const userCredential = await auth().signInWithEmailAndPassword(
+    email.trim().toLowerCase(), 
+    password
+  );
+  await userCredential.user.reload();
   return {
     uid: userCredential.user.uid,
     emailVerifie: userCredential.user.emailVerified,
@@ -37,11 +31,11 @@ export const firebaseConnexion = async (email: string, password: string) => {
 };
 
 export const reinitialiserMotDePasse = async (email: string) => {
-  await sendPasswordResetEmail(authInstance, email.trim().toLowerCase());
+  await auth().sendPasswordResetEmail(email.trim().toLowerCase());
 };
 
 export const firebaseDeconnexion = async () => {
-  await signOut(authInstance);
+  await auth().signOut();
 };
 
 export const traductionErreurFirebase = (code: string): string => {

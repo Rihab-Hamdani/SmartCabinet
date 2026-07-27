@@ -1,7 +1,4 @@
 {
-  "name": "SmartCabinet",
-  "displayName": "SmartCabinet",
-  "plugins": [
-    "expo-sharing"
-  ]
+    "name": "SmartCabinet",
+    "displayName": "MedFlow"
 }

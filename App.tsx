@@ -2,51 +2,28 @@ import React, { useEffect, useState } from 'react';
 import { View, ActivityIndicator, Text, LogBox } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import AppNavigator from './src/navigation/AppNavigator';
+import { initDatabase } from './src/database/database'; // 👈 AJOUTE CET IMPORT
 
 LogBox.ignoreLogs([
   'active-resource',
   'deprecated',
-  'Firebase namespaced',
+  'Firebase',
   'FBReactNativeSpec',
 ]);
 
 export default function App() {
-  // 1. Initialisation de Firebase sécurisée (avant les Hooks)
-  if (!firebase.apps.length) {
-    try {
-      firebase.initializeApp({} as any);
-    } catch (e) {
-      console.log('Firebase déjà prêt');
-    }
-  }
-
-  // 2. Déclaration des Hooks (Toujours en haut et sans conditions)
-  const [status, setStatus] = useState<'loading' | 'ready' | 'error'>(
-    'loading',
-  );
-  const [errMsg, setErrMsg] = useState('');
+  const [status, setStatus] = useState<'loading' | 'ready'>('loading');
 
   useEffect(() => {
     const init = async () => {
       try {
-        console.log('🚀 Tentative d’initialisation...');
+        console.log('🚀 Initialisation de SQLite...');
+        await initDatabase(); // 👈 ON FORCE LA CRÉATION DES TABLES ICI
 
-        // INITIALISATION FIREBASE ICI (C'est plus sûr en React 18)
-        if (!firebase.apps.length) {
-          await firebase.initializeApp({} as any);
-        }
-
-        // On initialise la DB
-        await initDatabase();
-        console.log('✅ SQLite prêt');
-
-        setTimeout(() => {
-          setStatus('ready');
-        }, 800);
-      } catch (e: any) {
-        console.log('⚠️ Erreur mineure init:', e);
-        setErrMsg(e.message || 'Erreur inconnue');
-        // On passe quand même en ready pour ne pas bloquer l'utilisateur au PFA
+        await new Promise(resolve => setTimeout(resolve, 800));
+        setStatus('ready');
+      } catch (e) {
+        console.error('❌ Échec du démarrage de la base de données :', e);
         setStatus('ready');
       }
     };
@@ -65,7 +42,7 @@ export default function App() {
           }}
         >
           <ActivityIndicator size="large" color="#00BFA5" />
-          <Text style={{ color: '#8B949E', fontSize: 14, letterSpacing: 2 }}>
+          <Text style={{ color: '#8B949E', fontSize: 14, marginTop: 10 }}>
             SMART CABINET
           </Text>
         </View>

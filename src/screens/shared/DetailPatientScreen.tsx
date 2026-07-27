@@ -15,13 +15,11 @@ import {
   useNavigation,
 } from '@react-navigation/native';
 
-import { getConsultationsParPatient } from '../../database/medicalService';
 import {
   getPatientById,
   getConsultationsPatient,
   getRDVParPatient,
   updatePatientAntecedents,
-  Consultation,
 } from '../../database/queries';
 
 import { imprimerOrdonnancePDF } from '../../services/pdfService';
@@ -144,11 +142,28 @@ const DetailPatientScreen = () => {
               </View>
             ) : (
               consultations.map(item => (
-                <View key={item.id} style={styles.consCard}>
+                /* 🔥 Rendu cliquable pour ouvrir l'écran de consultation de détail */
+                <TouchableOpacity
+                  key={item.id}
+                  style={styles.consCard}
+                  activeOpacity={0.8}
+                  onPress={() =>
+                    navigation.navigate('ConsultationDetail', {
+                      consultation: item,
+                      patient: patient,
+                    })
+                  }
+                >
                   <View style={styles.consHeader}>
-                    <Text style={styles.consDate}>Visite du {item.date}</Text>
+                    {/* 🔥 CORRIGÉ : On utilise date_cons au lieu de date */}
+                    <Text style={styles.consDate}>
+                      Visite du {item.date_cons}
+                    </Text>
                     <TouchableOpacity
-                      onPress={() => imprimerOrdonnancePDF(patient, item)}
+                      onPress={e => {
+                        e.stopPropagation(); // Évite d'ouvrir l'écran de détail en cliquant sur le PDF
+                        imprimerOrdonnancePDF(patient, item);
+                      }}
                       style={styles.pdfBtn}
                     >
                       <Text style={styles.pdfBtnText}>🖨️ PDF</Text>
@@ -163,13 +178,16 @@ const DetailPatientScreen = () => {
                   <Text style={styles.label}>Symptômes :</Text>
                   <Text style={styles.valeur}>{item.symptomes || 'N/A'}</Text>
 
-                  {item.notes && (
+                  {/* 🔥 CORRIGÉ : Ton champ en base de données s'appelle remarques_medecin (et non notes) */}
+                  {item.remarques_medecin && (
                     <>
                       <Text style={styles.label}>Remarques :</Text>
-                      <Text style={styles.valeur}>{item.notes}</Text>
+                      <Text style={styles.valeur}>
+                        {item.remarques_medecin}
+                      </Text>
                     </>
                   )}
-                </View>
+                </TouchableOpacity>
               ))
             )}
           </>
@@ -262,6 +280,7 @@ const styles = StyleSheet.create({
     borderColor: '#30363D',
   },
   sectionHeader: {
+    flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -287,6 +306,7 @@ const styles = StyleSheet.create({
   consHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
     marginBottom: 10,
   },
   consDate: { color: '#FFF', fontWeight: 'bold', fontSize: 14 },

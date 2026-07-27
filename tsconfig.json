@@ -13,8 +13,7 @@
     "resolveJsonModule": true,
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
-    "suppressImplicitAnyIndexErrors": true
+    "esModuleInterop": true
   },
   "include": ["**/*.ts", "**/*.tsx", "src/database"],
   "exclude": ["node_modules", "android", "ios", "**/*.spec.ts"]
